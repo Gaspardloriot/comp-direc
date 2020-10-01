@@ -22,12 +22,6 @@ console.log('mysql connected...')
 
 const app= express();
 
-
-
-
-
-
-
 //Insert post 1
 app.get('/addpost1', (req, res)=>{
     let post={title:'Post one', body:'this is post number 1'};

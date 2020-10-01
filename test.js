@@ -85,7 +85,7 @@ getDepartment.addEventListener('click',
 async ()=>{
  let newData=[]
  console.log('hello')
-  let response= await fetch(`/geteverything`)
+  let response= await fetch(`https://company-directory-backend.herokuapp.com/geteverything`)
   let data= await response.json();
   for (let i=0; i<=data.length-1; i++){
     newData.push([data[i]]);
