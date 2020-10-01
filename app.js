@@ -11,12 +11,14 @@ const db= mysql.createConnection({
     database: 'heroku_9275f474c0b2e99'
 });
 
+
+
 //Connect
 db.connect((err)=>{
 if(err){
     throw(err);
 }
-console.log('mysql connected...')
+console.log('mysql connected...');
 })
 
 
@@ -26,7 +28,7 @@ const app= express();
 setInterval(function () {
     db.query('SELECT 1');
     console.log(`query executed on port ${port}, maintaining database alive...`)
-}, 59000);
+}, 20000);
 
 
 //Insert post 1
