@@ -5,10 +5,10 @@ const port = process.env.PORT || 5000;
 
 //Create connection
 const db= mysql.createConnection({
-    host    : 'localhost',
-    user    : 'root',
-    password: '',
-    database: 'companydirectory'
+    host    : 'eu-cdbr-west-03.cleardb.net',
+    user    : 'b0a190c7e6a28c',
+    password: '5080e35d',
+    database: 'heroku_0d5a837ebba14c3'
 });
 
 //Connect
