@@ -1,7 +1,7 @@
 const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8081;
 
 //Create connection
 const db= mysql.createConnection({
@@ -18,7 +18,7 @@ db.connect((err)=>{
 if(err){
     throw(err);
 }
-console.log('mysql connected...');
+console.log('mysql connected...')
 })
 
 
@@ -27,8 +27,8 @@ const app= express();
 //Keep database alive
 setInterval(function () {
     db.query('SELECT 1');
-    console.log(`query executed on port ${port}, maintaining database alive...`)
-}, 20000);
+    console.log(`query executed on port ${port},maintaining database alive...`)
+}, 10000);
 
 
 //Insert post 1
