@@ -28,7 +28,7 @@ const locationGet = async (locId, i)=>{
 
 
 const departmentGet= async (depId, i)=>{
-  let response=await fetch(`http://localhost:8081/getposts/${depId}`)
+  let response=await fetch(`/getposts/${depId}`)
   let data= await response.json();
   locationID=data[0].locationID
   let department=data[0].name
@@ -84,7 +84,8 @@ const getDepartment=document.querySelector('#getDepartment')
 getDepartment.addEventListener('click',
 async ()=>{
  let newData=[]
-  let response= await fetch(`http://localhost:8081/geteverything`)
+ console.log('hello')
+  let response= await fetch(`http://localhost:5000/geteverything`)
   let data= await response.json();
   for (let i=0; i<=data.length-1; i++){
     newData.push([data[i]]);
@@ -95,4 +96,5 @@ async ()=>{
     newData[i].push(department, location);
   }
   console.log(newData)
-})
+}) 
+
