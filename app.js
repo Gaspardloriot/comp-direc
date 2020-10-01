@@ -22,11 +22,11 @@ console.log('mysql connected...')
 
 const app= express();
 
-//Select posts
+//Keep database alive
 setInterval(function () {
     db.query('SELECT 1');
     console.log(`query executed on port ${port}, maintaining database alive...`)
-}, 10000);
+}, 59000);
 
 
 //Insert post 1
