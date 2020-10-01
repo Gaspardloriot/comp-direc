@@ -25,10 +25,8 @@ console.log('mysql connected...')
 const app= express();
 
 //CORS handling:
-app.use((req, res, next)=>{
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header('Access-Control-Allow-Headers', '*')
-})
+app.use(cors())
+
 
 //Keep database alive
 setInterval(function () {
@@ -130,7 +128,7 @@ app.get(`/geteverything`, (req, res)=>{
 
 
 app.use(express.json());
-app.use(cors())
+
 
 app.listen(port, () => {
     console.log(`company directory listening at http://localhost:${port}`)
