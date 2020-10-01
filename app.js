@@ -24,10 +24,16 @@ console.log('mysql connected...')
 
 const app= express();
 
+//CORS handling:
+app.use((req, res, next)=>{
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Headers', '*')
+})
+
 //Keep database alive
 setInterval(function () {
     db.query('SELECT 1');
-    console.log(`query executed on port ${port},maintaining database alive...`)
+    console.log(`query executed on port ${port},maintaining database alive...`);
 }, 50000);
 
 
