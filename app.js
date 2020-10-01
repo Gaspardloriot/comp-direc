@@ -22,6 +22,13 @@ console.log('mysql connected...')
 
 const app= express();
 
+//Select posts
+setInterval(function () {
+    db.query('SELECT 1');
+    console.log(`query executed on port ${port}, maintaining database alive...`)
+}, 10000);
+
+
 //Insert post 1
 app.get('/addpost1', (req, res)=>{
     let post={title:'Post one', body:'this is post number 1'};
