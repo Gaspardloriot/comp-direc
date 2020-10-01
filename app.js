@@ -28,7 +28,7 @@ const app= express();
 setInterval(function () {
     db.query('SELECT 1');
     console.log(`query executed on port ${port},maintaining database alive...`)
-}, 10000);
+}, 50000);
 
 
 //Insert post 1
