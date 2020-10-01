@@ -4,8 +4,8 @@
   "description": "sample app for using mysql with node",
   "main": "app.js",
   "scripts": {
-   "start":"node app.js",
-   "node": "12.18.1"
+   "start":"node app.js"
+   
   },
   "author": "",
   "license": "ISC",
