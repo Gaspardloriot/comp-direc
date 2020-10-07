@@ -13,125 +13,90 @@ const db= mysql.createConnection({
 
 
 
-//Connect
+//Connect to database
 db.connect((err)=>{
-if(err){
-    throw(err);
-}
-console.log('mysql connected...')
-})
-
-
-const app= express();
-
-//CORS handling:
-app.use(cors())
-
-
-//Keep database alive
-setInterval(function () {
-    db.query('SELECT 1');
-    console.log(`query executed on port ${port},maintaining database alive...`);
-}, 50000);
-
-
-//Insert post 1
-app.get('/addpost1', (req, res)=>{
-    let post={title:'Post one', body:'this is post number 1'};
-    let sql= 'INSERT INTO posts SET ?'
-    let query= db.query(sql, post, (err, result)=>{
-        if(err) throw err;
-        console.log( result, 'Operation successful');
-        res.send('Post 1 added...');
+    if(err){
+        throw(err);
+    }
+    console.log(`mysql connected to database...`)
     })
-});
-
-//Insert post 2
-app.get('/addpost2', (req, res)=>{
-    let post={title:'Post two', body:'this is post number 2'};
-    let sql= 'INSERT INTO posts SET ?'
-    let query= db.query(sql, post, (err, result)=>{
-        if(err) throw err;
-        console.log( result, 'Operation successful');
-        console.log(db)
-        res.send('Post 2 added...');
+    
+    //Setting up EXPRESS, CORS, JSON
+    const app= express();
+    app.use(cors())
+    app.use(express.json());
+    
+    
+    //Keep database alive
+    setInterval(function () {
+        db.query('SELECT 1');
+        console.log(`query executed on port ${port},maintaining database alive...`);
+    }, 50000);
+    
+    //get database
+    app.get(`/geteverything`, (req, res)=>{    
+        let sql = `SELECT * FROM PERSONNEL `;
+        let query= db.query(sql, (err,result)=>{
+            if (err) throw err;
+            console.log(query);        
+            
+            res.send(result)
+        });
+    });
+    
+    //Select posts
+    app.get('/getposts/:id', (req, res)=>{
+        let sql = `SELECT * FROM department WHERE id=${req.params.id}`;
+        let query= db.query(sql, (err,results)=>{
+            if (err) throw err;
+            console.log(results[0].name);
+            res.json(results)
+        });
+    });
+    
+    //Update
+    app.post('/update', (req, res)=>{    
+         let body=req.body;
+         let req_table=body.table
+         let req_field=body.field
+         let changeTo=body.changeTo
+         let id=body.id;
+         let sql = `UPDATE ${req_table} SET ${req_field} = '${changeTo}' WHERE id=${id}`;
+         let query= db.query(sql, (err,result)=>{
+            if (err) throw err;
+            console.log(result);        
+            console.log(req.body);
+            res.json(`employee ${id}'s ${req_field} was updated to ${changeTo}`)
+        })
     })
-});
-
-//Select posts
-app.get('/getposts/:id', (req, res)=>{
-    let sql = `SELECT * FROM department WHERE id=${req.params.id}`;
-    let query= db.query(sql, (err,results)=>{
-        if (err) throw err;
-        console.log(results[0].name);       
-        res.json(results)
+    
+    //Add a new employee:
+    app.post('/add_employee', (req, res)=>{
+        console.log(req.body)
+        let newEmployee=req.body
+        let idGenerator=Math.floor((Math.random()*1000000)+1);    
+        req.body.id=idGenerator;
+        let sql= 'INSERT INTO personnel SET ?'
+        let query= db.query(sql, newEmployee, (err, result)=>{
+            if(err) throw err;
+            console.log( `${idGenerator} was added,`, 'new employee successfully processed...');
+            res.json(`New employee ${newEmployee.firstName} ${newEmployee.lastName}, id: ${newEmployee.id} was added...`);
+        })
     });
-});
-
-//Select posts
-app.get('/getlocation/:id', (req, res)=>{
-    let sql = `SELECT * FROM location WHERE id=${req.params.id}`;
-    let query= db.query(sql, (err,results)=>{
-        if (err) throw err;
-        console.log(results);       
-        res.json(results)
+    
+    //delete post
+    app.get('/delete/:id', (req, res)=>{    
+        let sql = `DELETE FROM personnel WHERE id= ${req.params.id}`;
+        let query= db.query(sql, (err,result)=>{
+            if (err) throw err;
+            console.log(res);
+            res.json(`Employee ${req.params.id} was deleted`)
+        });
     });
-});
-
-//Select post
-app.get('/getpost/:id', (req, res)=>{
-    let sql = `SELECT * FROM personnel WHERE id= ${req.params.id}`;
-    let query= db.query(sql, (err,result)=>{
-        if (err) throw err;
-        console.log(result);        
-        res.send(result)
-    });
-});
-
-//update post
-app.get('/updatepost/:id', (req, res)=>{
-    let newTitle= 'Updated Title';
-    let sql = `UPDATE POSTS SET title= '${newTitle}' WHERE id= ${req.params.id}`;
-    let query= db.query(sql, (err,result)=>{
-        if (err) throw err;
-        console.log(result);
-        res.send(result)
-    });
-});
-
-function deletePost(num){
-//delete post
-app.get('/deletepost', (req, res)=>{
-    let newTitle= 'Updated Title';
-    let sql = `DELETE FROM posts WHERE id= ${num}`;
-    let query= db.query(sql, (err,result)=>{
-        if (err) throw err;
-        console.log(res);
-        res.send('Post deleted, Operations success')
-    });
-});
-}
-
-let table='personnel'
-//get database
-app.get(`/geteverything`, (req, res)=>{    
-    let sql = `SELECT * FROM ${table} `;
-    let query= db.query(sql, (err,result)=>{
-        if (err) throw err;
-        console.log(query);        
-        
-        res.send(result)
-    });
-});
-
-
-
-
-app.use(express.json());
-
-
-app.listen(port, () => {
-    console.log(`company directory listening at http://localhost:${port}`)
-  });
+    
+    app.listen(port, () => {
+        console.log(`company directory listening at http://localhost:${port}`)
+      });
+    
 
   
